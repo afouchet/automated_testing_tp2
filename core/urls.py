@@ -27,4 +27,9 @@ urlpatterns = [
         views.get_my_profile,
         name='get_my_profile'
     ),
+    re_path(
+        r'^login/$',
+        views.login_view,
+        name='login'
+    ),
 ]

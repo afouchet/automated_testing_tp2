@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import JsonResponse
 import json
@@ -59,3 +60,21 @@ def get_my_profile(request):
         "id": user.id,
     })
 
+
+def login_view(request):
+    data = json.loads(request.body)
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return Response(
+            {"detail": "Username and password are required."}, status=400
+        )
+
+    user = authenticate(request, username=username, password=password)
+
+    if user is not None:
+        login(request, user)
+        return JsonResponse({"message": "Login successful"})
+    else:
+        return JsonResponse({"detail": "Invalid credentials"}, status=401)
