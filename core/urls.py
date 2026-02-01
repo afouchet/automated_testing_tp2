@@ -22,4 +22,9 @@ urlpatterns = [
         views.get_user,
         name='get_user'
     ),
+    re_path(
+        r'user/my_profile/',
+        views.get_my_profile,
+        name='get_my_profile'
+    ),
 ]

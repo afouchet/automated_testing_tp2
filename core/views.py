@@ -44,3 +44,18 @@ def get_user(request):
     except User.DoesNotExist:
         return JsonResponse({'error':'not found'}, status=404)
 
+
+def get_my_profile(request):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": "Must be authenticated to see your profile"},
+            status=403,
+        )
+
+    user = request.user
+    return JsonResponse({
+        "username": user.username,
+        "email": user.email,
+        "id": user.id,
+    })
+

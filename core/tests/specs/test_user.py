@@ -1,5 +1,7 @@
 import pytest
 
+from core.tests.fixtures import user_bob
+
 
 @pytest.mark.django_db
 def test_create_user(client):
@@ -37,3 +39,14 @@ def test_create_user(client):
         "username": "Bob",
         "email": "bob@example.com",
     }
+
+@pytest.mark.django_db
+def test_get_my_profile__authenticated(user_bob):
+    # Given
+
+    # When
+    response = user_bob.client.get("/core/user/my_profile/")
+
+    # Then
+    assert response.status_code == 200
+    assert response.json()["id"] == user_bob.id
