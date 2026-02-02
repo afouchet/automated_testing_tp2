@@ -12,7 +12,6 @@ class BookUser(models.Model):
     # Là, il y a le Django User pour gérer l'authentification
     # Et noter BookUser pour gérer toutes les informations qu'on veut
     # enregistrer sur l'utilisateur
-    is_company = models.BooleanField(default=False)
 
     @property
     def name(self):

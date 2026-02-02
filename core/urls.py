@@ -28,11 +28,6 @@ urlpatterns = [
         name='login'
     ),
     re_path(
-        r'^theater/create/$',
-        views.create_theater,
-        name='create_theater'
-    ),
-    re_path(
         r'^book_movie/$',
         views.book_movie,
         name='book_movie'

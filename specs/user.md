@@ -15,9 +15,3 @@ Scenario: Authentication: unauthenticated get my profile -> error
   When user asks his profile
   Then he receives 403 error
 
-
-Scenario: Create a company user
-  Given nothing
-  When user sends username, password, email and is_company=True
-  Then a "company" account is created
-

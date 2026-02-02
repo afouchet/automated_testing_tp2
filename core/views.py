@@ -23,11 +23,8 @@ def create_user(request):
         )
         user.save()
         
-        # Creating our BookUser model
-        book_user = models.BookUser(
-            user=user,
-            is_company=data.get("is_company", False),
-        )
+        # Creating our BookUser model, saving what we want to know on user
+        book_user = models.BookUser(user=user)
         book_user.save()
 
         return JsonResponse({
@@ -89,32 +86,6 @@ def login_view(request):
         return JsonResponse({"message": "Login successful"})
     else:
         return JsonResponse({"detail": "Invalid credentials"}, status=401)
-
-
-def create_theater(request):
-    if not request.user.is_authenticated:
-        return JsonResponse(
-            {"error": "Must be authenticated to see your profile"},
-            status=403,
-        )
-
-    user = request.user.bookuser
-
-    if request.method == "POST":
-        data = json.loads(request.body)
-        
-        theater = models.Theater(
-            user=user,
-            name=data["name"],
-            address=data["address"],
-        )
-        theater.save()
-
-        return JsonResponse({
-            "name": theater.name,
-            "address": theater.address,
-            "id": theater.id,
-        }, status=201)
 
 
 def book_movie(request):

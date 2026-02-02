@@ -53,32 +53,11 @@ def test_get_my_profile__authenticated(user_bob):
 
 
 @pytest.mark.django_db
-def test_create_user__company_case(client):
+def test_get_my_profile__unauthenticated(client):
     # Given
-    user_payload = {
-        "name": "UGC",
-        "email": "ugc@ugc.com",
-	"password": "I_am_Bob",
-        "is_company": True,
-    }
 
     # When
-    response = client.post(
-        "/core/user/create/",
-        user_payload,
-        content_type="application/json",
-    )
-    created_user = response.json()
-    response = client.get(
-        f"/core/user/get/?id={created_user['id']}",
-    )
-    
+    response = client.get("/core/user/my_profile/")
+
     # Then
-    # Verification: Is it in base
-    assert response.status_code == 200
-    assert response.json() == {
-        "id": created_user["id"],
-        "username": "UGC",
-        "email": "ugc@ugc.com",
-        "is_company": True
-    }
+    assert response.status_code == 403
