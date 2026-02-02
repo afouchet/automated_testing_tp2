@@ -5,11 +5,7 @@ from django.http import JsonResponse
 import json
 
 from core import models
-
-# Create your views here.
-def hello(request):
-    return JsonResponse({"hello": "world"})
-
+from external_apis import mk2
 
 def create_user(request):
     if request.method == "POST":
@@ -116,3 +112,21 @@ def create_theater(request):
             "id": theater.id,
         }, status=201)
 
+
+def book_movie(request):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": "Must be authenticated to book a seat"},
+            status=403,
+        )
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        return JsonResponse(
+            mk2.book_seat(
+                theater_name="MK2 Gambetta",
+                movie_name=data["movie_name"],
+                date=data["date"],
+            )
+        )

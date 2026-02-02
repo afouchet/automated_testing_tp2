@@ -8,11 +8,6 @@ app_name = 'core'
 urlpatterns = [
     # Login urls
     re_path(
-        r'^hello/$',
-        views.hello,
-        name='hello'
-    ),
-    re_path(
         r'^user/create/$',
         views.create_user,
         name='create_user'
@@ -36,5 +31,10 @@ urlpatterns = [
         r'^theater/create/$',
         views.create_theater,
         name='create_theater'
+    ),
+    re_path(
+        r'^book_movie/$',
+        views.book_movie,
+        name='book_movie'
     ),
 ]
