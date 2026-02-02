@@ -15,23 +15,28 @@ def create_user(request):
             return JsonResponse({"error": "Email required"}, status=400)
 
         
-        user = User.objects.create_user(
+        # For authentification, using Django's built-in User
+        user = models.User.objects.create_user(
             username=data['name'],
             email=data['email'],
             password=data['password']
         )
         user.save()
         
-        user_type = models.UserType(
+        # Creating our BookUser model
+        book_user = models.BookUser(
             user=user,
+            name=data["name"],
+            email=data["email"],
             is_company=data.get("is_company", False),
         )
-        user_type.save()
+        book_user.save()
+
         return JsonResponse({
-            "username": user.username,
-            "email": user.email,
-            "id": user.id,
-            "is_company": user_type.is_company,
+            "username": book_user.name,
+            "email": book_user.email,
+            "id": book_user.id,
+            "is_company": book_user.is_company,
         }, status=201)
 
 
@@ -40,14 +45,14 @@ def get_user(request):
     if not user_id:
         return JsonResponse({'error':'id required'}, status=400)
     try:
-        user = User.objects.get(pk=user_id)
+        user = models.BookUser.objects.get(pk=user_id)
         return JsonResponse({
-            "username": user.username,
+            "username": user.name,
             "email": user.email,
             "id": user.id,
-            "is_company": user.user_type.first().is_company,
+            "is_company": user.is_company,
         })
-    except User.DoesNotExist:
+    except models.BookUser.DoesNotExist:
         return JsonResponse({'error':'not found'}, status=404)
 
 
@@ -58,13 +63,14 @@ def get_my_profile(request):
             status=403,
         )
 
-    user = request.user
+    # For Django's built-in User to our BookUser
+    user = request.user.book_user.first()
 
     return JsonResponse({
-        "username": user.username,
+        "username": user.name,
         "email": user.email,
         "id": user.id,
-        "is_company": user.user_type.first().is_company,
+        "is_company": user.is_company,
     })
 
 
