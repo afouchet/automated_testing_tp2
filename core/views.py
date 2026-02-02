@@ -26,8 +26,6 @@ def create_user(request):
         # Creating our BookUser model
         book_user = models.BookUser(
             user=user,
-            name=data["name"],
-            email=data["email"],
             is_company=data.get("is_company", False),
         )
         book_user.save()
@@ -64,7 +62,7 @@ def get_my_profile(request):
         )
 
     # For Django's built-in User to our BookUser
-    user = request.user.book_user.first()
+    user = request.user.bookuser
 
     return JsonResponse({
         "username": user.name,
@@ -100,7 +98,7 @@ def create_theater(request):
             status=403,
         )
 
-    user = request.user
+    user = request.user.bookuser
 
     if request.method == "POST":
         data = json.loads(request.body)
